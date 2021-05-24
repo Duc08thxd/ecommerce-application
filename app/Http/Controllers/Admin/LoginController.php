@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\SessionGuard;
 
 class LoginController extends Controller
 {
@@ -36,5 +37,12 @@ class LoginController extends Controller
             return redirect()->intended(route('admin.dashboard'));
         }
         return back()->withInput($request->only('email', 'remember'));
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::guard('admin')->Auth::logout();
+        $request->session()->invalidate();
+        return redirect()->route('admin.login');
     }
 }
